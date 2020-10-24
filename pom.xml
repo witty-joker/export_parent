@@ -10,6 +10,8 @@
     <version>1.0-SNAPSHOT</version>
 
     <!--Idea中添加了一行-->
+
+	<!--本地git添加了一行-->
     <modules>
         <module>export_commons</module>
         <module>export_domain</module>
