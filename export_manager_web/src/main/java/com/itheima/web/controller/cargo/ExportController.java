@@ -1,6 +1,7 @@
 package com.itheima.web.controller.cargo;
 
 
+import cn.hutool.core.bean.BeanUtil;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.github.pagehelper.PageInfo;
 import com.itheima.domain.cargo.ContractExample;
@@ -13,6 +14,7 @@ import com.itheima.service.cargo.ExportProductService;
 import com.itheima.service.cargo.ExportService;
 import com.itheima.web.controller.BaseController;
 import net.sf.jasperreports.engine.*;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -195,6 +197,29 @@ public class ExportController extends BaseController {
         return "redirect:/cargo/export/list.do";
     }
 
+    // 设置下载报运单
+    @RequestMapping(value = "/exportPdf", name = "报运单下载")
+    public void exportPdf(String id) throws JRException, IOException {
+        //0. 获取模板
+        String realPath = session.getServletContext().getRealPath("/jasper/export.jasper");
+
+        //1. 获取数据 条件 报运单id    结果 报运单信息和报运单下货物信息
+        //1-1) 报运单信息
+        Export export = exportService.findById(id);
+        Map<String, Object> map = BeanUtil.beanToMap(export);
+
+        //1-2) 货物信息
+        List<ExportProduct> list = exportProductService.findByExportId(id);
+        JRDataSource dataSource = new JRBeanCollectionDataSource(list);
+
+
+        //2  向模板填充数据
+        JasperPrint jasperPrint = JasperFillManager.fillReport(realPath, map, dataSource);
+
+
+        //3.输出到浏览器
+        JasperExportManager.exportReportToPdfStream(jasperPrint, response.getOutputStream());
+    }
 
     // ============================================
     // 下载PDF 测试1  exportPdf1
@@ -212,7 +237,7 @@ public class ExportController extends BaseController {
         JasperExportManager.exportReportToPdfStream(jasperPrint, response.getOutputStream());
     }
 
-    // 测试2 exportPdf1
+    // 测试2 exportPdf3
     @RequestMapping(value = "/exportPdf2", name = "测试2")
     public void exportPdf2(String id) throws JRException, IOException {
         //1. 获取模板
@@ -227,6 +252,34 @@ public class ExportController extends BaseController {
 
         JRDataSource dataSource = new JREmptyDataSource();
         JasperPrint jasperPrint = JasperFillManager.fillReport(realPath, map, dataSource);
+
+        //3.输出到浏览器
+        JasperExportManager.exportReportToPdfStream(jasperPrint, response.getOutputStream());
+    }
+
+    // 测试3 exportPdf3
+    @RequestMapping(value = "/exportPdf3", name = "测试2")
+    public void exportPdf3(String id) throws JRException, IOException {
+        //1. 获取模板
+        String realPath = session.getServletContext().getRealPath("/jasper/demo2.jasper");
+
+        // 2 向模板填充数据   sourceFileName(路径)    params(map集合)    dataSource(本质上时候list)
+        List<Map<String, Object>> list = new ArrayList<>();
+        for (int i = 0; i < 5; i++) {
+            Map<String, Object> map = new HashMap<>();
+            map.put("userName", "安妮");
+            map.put("email", "17@qq.com");
+            map.put("deptName", "小熊里");
+            map.put("companyName", "微软");
+
+            // 添加到list
+            list.add(map);
+        }
+
+        // 将list转换为JRDataSource
+        JRDataSource dataSource = new JRBeanCollectionDataSource(list);
+
+        JasperPrint jasperPrint = JasperFillManager.fillReport(realPath, new HashMap<>(), dataSource);
 
         //3.输出到浏览器
         JasperExportManager.exportReportToPdfStream(jasperPrint, response.getOutputStream());
