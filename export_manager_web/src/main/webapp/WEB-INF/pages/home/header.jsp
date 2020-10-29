@@ -211,13 +211,13 @@
                 <!-- User Account: style can be found in dropdown.less -->
                 <li class="dropdown user user-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        <img src="../img/user2-160x160.jpg" class="user-image" alt="User Image">
+                        <img src="${sessionScope.loginUser.pic}" class="user-image" alt="User Image">
                         <span class="hidden-xs"> ${sessionScope.loginUser.userName}</span>
                     </a>
                     <ul class="dropdown-menu">
                         <!-- User image -->
                         <li class="user-header">
-                            <img src="../img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                            <img src="${sessionScope.loginUser.pic}" class="img-circle" alt="User Image">
 
                             <p>
                                 ${sessionScope.loginUser.userName}
@@ -239,9 +239,13 @@
                 </li>-->
                         <!-- Menu Footer-->
                         <li class="user-footer">
+
+                            <%-- ------------修改个人信息------------ --%>
                             <div class="pull-left">
-                                <a href="#" class="btn btn-default btn-flat">修改密码</a>
+                                <a class="btn btn-default btn-flat" data-toggle="modal" data-target="#myModal">修改密码</a>
                             </div>
+                            <%-- ------------修改个人信息------------ --%>
+
                             <div class="pull-right">
                                 <a href="/logout.do" class="btn btn-default btn-flat">注销</a>
                             </div>
@@ -251,7 +255,13 @@
 
             </ul>
         </div>
+
     </nav>
+
+
+
 </header>
 <!-- 页面头部 /-->
+
+
 

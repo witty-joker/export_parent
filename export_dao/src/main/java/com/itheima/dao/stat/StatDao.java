@@ -16,4 +16,13 @@ public interface StatDao {
 
     // 系统访问压力图（每个小时访问系统的人员数量）
     List<Map> findOnlineCharts(String companyId);
+
+    //
+    List<Map> findPriceCharts(String companyId);
+
+    // 统计公司内每个部门的人数
+    List<Map> findIrsCharts(String companyId);
+
+    // // 统计公司内每个人签订的购销合同数
+    List<Map> findContractCharts(String companyId);
 }

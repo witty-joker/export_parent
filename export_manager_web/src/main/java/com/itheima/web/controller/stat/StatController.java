@@ -29,6 +29,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -75,6 +76,7 @@ public class StatController extends BaseController {
     }
 
     // 每小时在线人数分析
+    @ResponseBody
     @RequestMapping(value = "/onlineCharts", name = "每小时在线人数分析")
     public List<Map> onlineCharts() {
 
@@ -84,5 +86,55 @@ public class StatController extends BaseController {
         List<Map> onlineCharts = statService.findOnlineCharts(getCompanyId());
 
         return onlineCharts;
+    }
+
+    // =============扩展功能================
+    // 查询市场价最高的前10名产品（货物）（按市场价统计）
+    @ResponseBody
+    @RequestMapping(value = "/priceCharts", name = "查询市场价最高的前10名产品（货物）（按市场价统计）")
+    public List<Map> priceCharts() {
+        /*
+            查询市场价最高的前10名产品（货物）（按市场价统计）
+         */
+        List<Map> priceCharts = statService.findPriceCharts(getCompanyId());
+
+        return priceCharts;
+    }
+
+    // 统计公司内每个部门的人数
+    @ResponseBody
+    @RequestMapping(value = "/irsCharts", name = "统计公司内每个部门的人数")
+    public List<Map> irsCharts() {
+        /*
+            统计公司内每个部门的人数
+         */
+        List<Map> irsCharts = statService.findIrsCharts(getCompanyId());
+
+        return irsCharts;
+    }
+
+    // 统计公司内每个人签订的购销合同数
+    @ResponseBody
+    @RequestMapping(value = "/contractCharts", name = "统计公司内每个人签订的购销合同数")
+    public List<Map> contractCharts() {
+        /*
+            统计公司内每个人签订的购销合同数
+         */
+        List<Map> contractCharts = statService.findContractCharts(getCompanyId());
+
+        return contractCharts;
+    }
+
+    // 航运地图展示
+    @ResponseBody
+    @RequestMapping(value = "/shippingCharts", name = "航运地图展示")
+    public List<Map> shippingCharts() {
+        /*
+            航运地图展示
+         */
+        List<Map> shippingCharts = new ArrayList<>();
+        // List<Map> shippingCharts = statService.findShippingCharts(getCompanyId());
+
+        return shippingCharts;
     }
 }

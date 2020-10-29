@@ -24,11 +24,40 @@
     <!--系统访问压力图-->
     <select id="findOnlineCharts" resultType="java.util.Map">
         SELECT a.A1 AS `name`,IFNULL(b.`value`,0) AS `value`
-            FROM `st_online_info` AS a
-            LEFT JOIN
-                (SELECT DATE_FORMAT(`time`,"%H") AS  mytime,COUNT(1) AS `value` FROM `st_sys_log`
-                WHERE company_id = #{companyId}
-                GROUP BY mytime) AS b
-            ON a.A1 = b.mytime
+        FROM `st_online_info` AS a
+        LEFT JOIN
+        (SELECT DATE_FORMAT(`time`,"%H") AS  mytime,COUNT(1) AS `value` FROM `st_sys_log`
+        WHERE company_id = #{companyId}
+        GROUP BY mytime) AS b
+        ON a.A1 = b.mytime
+    </select>
+
+    <!--查询市场价最高的前10名产品（货物）（按市场价统计）-->
+    <select id="findPriceCharts" resultType="java.util.Map">
+        SELECT DISTINCT CONCAT(factory_name,product_no) AS `name`, price AS `value`
+        FROM `co_contract_product`
+        WHERE company_id = #{companyId}
+        ORDER BY `value` DESC LIMIT 10
+    </select>
+
+    <!--统计公司内每个部门的人数-->
+    <select id="findIrsCharts" resultType="java.util.Map">
+        SELECT d.dept_name AS `name`, IFNULL(n.`dValue`, 0) AS `value`
+        FROM `pe_dept` AS d LEFT JOIN
+        (SELECT dept_name AS `dName`, COUNT(*) AS `dValue` FROM
+        `pe_user`
+        GROUP BY `dName`) AS n
+        ON d.dept_name = n.`dName`
+        WHERE company_id = #{companyId}
+    </select>
+
+    <!--// 统计公司内每个人签订的购销合同数-->
+    <select id="findContractCharts" resultType="java.util.Map">
+         SELECT user_name AS `name`, IFNULL(c.cValue, 0) AS `value` FROM `pe_user` AS u LEFT JOIN
+         ( SELECT create_by AS `cName`, COUNT(*) AS `cValue` FROM `co_contract`
+         WHERE company_id = #{companyId}
+         GROUP BY cName) AS c
+         ON u.user_id = c.cName
+         WHERE company_id = #{companyId}
     </select>
 </mapper>

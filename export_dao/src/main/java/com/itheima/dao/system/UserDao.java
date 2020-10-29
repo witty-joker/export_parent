@@ -34,4 +34,7 @@ public interface UserDao {
 
     // 根据email获取用户信息 返回user对象
     User findByEmail(String email);
+
+    // 2.根据openId判断用户是否存在
+    User findByOpenid(String openid);
 }

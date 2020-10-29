@@ -15,7 +15,7 @@
 
     <!--包扫描-->
     <context:component-scan base-package="com.itheima.utils"/>
-    <!--加载外部配置-->
+    <!--加载外部配置 七牛云-->
 <!--    <context:property-placeholder location="classpath:config/qiniu.properties"/>-->
 
     <bean id="propertyPlaceholderConfigurer2" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
@@ -27,4 +27,5 @@
             </list>
         </property>
     </bean>
+
 </beans>

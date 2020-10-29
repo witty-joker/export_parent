@@ -22,6 +22,8 @@
         <result column="degree" property="degree"/>
         <result column="remark" property="remark"/>
         <result column="order_no" property="orderNo"/>
+        <result column="pic" property="pic"/>
+        <result column="openid" property="openid"/>
     </resultMap>
 
     <select id="findAll" resultMap="BaseResultMap">
@@ -35,10 +37,10 @@
     <insert id="save">
         insert into pe_user (user_id, dept_id, email, user_name, password, state, company_id,
         company_name, dept_name, manager_id, join_date, salary, birthday,
-        gender, station, telephone, degree, remark, order_no)
+        gender, station, telephone, degree, remark, order_no, pic, openid)
         values (#{id}, #{deptId}, #{email}, #{userName}, #{password}, #{state}, #{companyId},
         #{companyName}, #{deptName}, #{managerId}, #{joinDate}, #{salary}, #{birthday},
-        #{gender}, #{station}, #{telephone}, #{degree}, #{remark}, #{orderNo})
+        #{gender}, #{station}, #{telephone}, #{degree}, #{remark}, #{orderNo}，#{pic}, #{openid})
     </insert>
 
     <update id="update">
@@ -113,6 +115,12 @@
             <if test="remark!=null and remark!=''">
                 remark =#{remark},
             </if>
+            <if test="pic!=null and pic!=''">
+                pic =#{pic},
+            </if>
+            <if test="openid != null and openid != ''">
+                openid =#{openid}
+            </if>
         </set>
         where user_id = #{id}
     </update>
@@ -139,6 +147,11 @@
     <!--根据email获取用户信息 返回user对象-->
     <select id="findByEmail" resultMap="BaseResultMap">
         select * from pe_user where email = #{email}
+    </select>
+
+    <!--根据openId判断用户是否存在-->
+    <select id="findByOpenid" resultType="com.itheima.domain.system.User">
+        select * from pe_user where openid = #{openid}
     </select>
 
 

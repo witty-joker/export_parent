@@ -13,6 +13,7 @@
 			    http://www.springframework.org/schema/tx
 			    http://www.springframework.org/schema/tx/spring-tx.xsd">
 
+
     <!--注解扫描-->
     <context:component-scan base-package="com.itheima">
         <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
@@ -22,6 +23,17 @@
     <bean id="transactionManager"
           class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
         <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <!--加载外部配置 微信-->
+    <bean id="propertyPlaceholderConfigurer3" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="order" value="3"/>
+        <property name="ignoreUnresolvablePlaceholders" value="true"></property>
+        <property name="locations">
+            <list>
+                <value>classpath:/wx.properties</value>
+            </list>
+        </property>
     </bean>
 
     <!--事务管理器需要的参数-->
@@ -39,4 +51,5 @@
         <!--切面-->
         <aop:advisor advice-ref="txAdvice" pointcut-ref="pt"/>
     </aop:config>
+
 </beans>

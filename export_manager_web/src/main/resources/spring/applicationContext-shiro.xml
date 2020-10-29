@@ -17,11 +17,16 @@
       <value>
         <!--anon 通过。authc拦截-->
         /login.jsp = anon
+        /bindLogin.jsp = anon
         /css/** = anon
         /img/** = anon
+        /js/** = anon
         /plugins/** = anon
         /make/** = anon
         /login.do = anon
+        /weixinlogin.do = anon
+        /bindLogin.do = anon
+        /avoidCodeLogin.do = anon
 
         <!--
           URL=perms["权限标识"]

@@ -4,13 +4,17 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.itheima.dao.system.ModuleDao;
 import com.itheima.dao.system.UserDao;
+import com.itheima.domain.ResultInfo;
 import com.itheima.domain.system.Module;
 import com.itheima.domain.system.User;
+import com.itheima.utils.HttpUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.itheima.service.system.UserService;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.util.List;
+import java.util.Map;
 
 // userService 部门service
 @Service
@@ -109,4 +113,48 @@ public class UserServiceImpl implements UserService {
             return moduleDao.findByUserId(user.getId());
         }
     }
+
+    // 通过微信code登录
+    // 微信登录参数
+    @Value("${wx.appid}")
+    private String appid;
+    @Value("${wx.secret}")
+    private String secret;
+    @Value("${wx.accessTokenUrl}")
+    private String accessTokenUrl;
+    @Value("${wx.wxInfoUrl}")
+    private String wxInfoUrl;
+
+    // 微信登录逻辑
+    @Override
+    public User wxLogin(String code) {
+        User user = null;
+        //1.[微信获取openid失败拦截] 根据code获取access_token和openId 。
+        String atUtl = accessTokenUrl + "?code="+code+"&appid="+appid+"&secret="+secret+"&grant_type=authorization_code";
+        System.out.println(atUtl);
+
+        Map<String, Object> map = HttpUtils.sendGet(atUtl);
+        Object access_token = map.get("access_token");
+        Object openid = map.get("openid").toString();
+        if(access_token == null && openid == null) {
+            // 2 当查询不到当前用户的openid时 ，返回为空[微信获取openid失败]
+            return user;
+        }
+
+        // 2.根据openId判断用户是否存在
+        user = userDao.findByOpenid((String) openid);
+        if (user != null) {
+            // 用户存在 返回用户信息
+            return user;
+        } else {
+            // 用户不存在，需要绑定用户
+            // 1 存入openid
+            user = new User();
+            user.setOpenid((String) openid);
+
+            // 2 返回user对象
+            return user;
+        }
+    }
+
 }

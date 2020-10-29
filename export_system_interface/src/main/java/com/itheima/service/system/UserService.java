@@ -1,6 +1,7 @@
 package com.itheima.service.system;
 
 import com.github.pagehelper.PageInfo;
+import com.itheima.domain.ResultInfo;
 import com.itheima.domain.system.Module;
 import com.itheima.domain.system.User;
 
@@ -40,4 +41,7 @@ public interface UserService {
 
     // 根据用户user查询对应的权限
     List<Module> findModuleByUser(User user);
+
+    // 通过微信code登录
+    User wxLogin(String code);
 }

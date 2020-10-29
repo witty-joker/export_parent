@@ -3,6 +3,7 @@ package com.itheima.domain.system;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.io.File;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -44,5 +45,6 @@ public class User implements Serializable {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date updateTime; // 更新时间
     private String remark; // 备注
-
+    private String pic; // 头像
+    private String openid;  // 微信id
 }

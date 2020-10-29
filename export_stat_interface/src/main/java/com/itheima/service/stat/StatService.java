@@ -16,4 +16,13 @@ public interface StatService {
 
     // 系统访问压力图（每个小时访问系统的人员数量）
     List<Map> findOnlineCharts(String companyId);
+
+    // 查询市场价最高的前10名产品（货物）（按市场价统计）
+    List<Map> findPriceCharts(String companyId);
+
+    // 统计公司内每个部门的人数
+    List<Map> findIrsCharts(String companyId);
+
+    // 统计公司内每个人签订的购销合同数
+    List<Map> findContractCharts(String companyId);
 }
